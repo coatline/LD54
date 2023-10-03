@@ -1,0 +1,41 @@
+[gd_resource type="TileSet" load_steps=5 format=3 uid="uid://mi2fnic3oi4f"]
+
+[ext_resource type="Texture2D" uid="uid://bacxiih7f24vf" path="res://Graphics/TilePallett.png" id="1_6rfl3"]
+[ext_resource type="Texture2D" uid="uid://vx64lx0wosbm" path="res://Graphics/DecorPallett.png" id="2_8ryrw"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_0uhec"]
+texture = ExtResource("1_6rfl3")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+0:1/0 = 0
+1:1/animation_columns = 3
+1:1/animation_frame_0/duration = 0.9
+1:1/animation_frame_1/duration = 0.9
+1:1/animation_frame_2/duration = 0.9
+1:1/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_higev"]
+texture = ExtResource("2_8ryrw")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+2:1/0 = 0
+1:1/0 = 0
+0:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+3:2/0 = 0
+2:2/0 = 0
+2:3/0 = 0
+1:3/0 = 0
+0:3/0 = 0
+
+[resource]
+tile_size = Vector2i(32, 32)
+sources/0 = SubResource("TileSetAtlasSource_0uhec")
+sources/1 = SubResource("TileSetAtlasSource_higev")

@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="Tile" load_steps=3 format=3 uid="uid://co28hchw0mw5d"]
+
+[ext_resource type="Script" path="res://Scripts/tile.gd" id="1_5533u"]
+[ext_resource type="AudioStream" uid="uid://k3inrdk3l10u" path="res://Audio/Footsteps/snow_footstep.ogg" id="1_rd2qm"]
+
+[resource]
+script = ExtResource("1_5533u")
+name = "Snow"
+id = 0
+atlas_coords = Vector2i(3, 0)
+required_progress = 3
+footstep_sound = ExtResource("1_rd2qm")

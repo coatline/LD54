@@ -1,0 +1,114 @@
+[gd_scene load_steps=13 format=3 uid="uid://65waqo4b2ocy"]
+
+[ext_resource type="PackedScene" uid="uid://uoplpq7ugdm5" path="res://damage_taker.tscn" id="1_e7cjy"]
+[ext_resource type="Script" path="res://Scenes/pumpkin.gd" id="1_nyhtd"]
+[ext_resource type="PackedScene" uid="uid://ce58u41wb8o20" path="res://Shaders/flash_animation.tscn" id="2_8p32u"]
+[ext_resource type="Texture2D" uid="uid://cd3ubmiud27as" path="res://Graphics/Enemies/SnowEnemy.png" id="3_thex2"]
+[ext_resource type="Texture2D" uid="uid://bsgyt1mg2s357" path="res://Graphics/Shadow.png" id="4_bjsqv"]
+[ext_resource type="Shader" path="res://Shaders/flash_white.gdshader" id="4_i7a2o"]
+[ext_resource type="PackedScene" uid="uid://crbhj1tfua661" path="res://Scenes/footstepper.tscn" id="7_4tkd2"]
+
+[sub_resource type="Animation" id="Animation_o30a4"]
+resource_name = "die"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprites:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1e-05, 1e-05)]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("DamageTaker")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.3),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"destroy_root"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_6ppvu"]
+resource_name = "idle"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprites:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1.06, 1.06), Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_nvc2i"]
+resource_name = "move"
+length = 0.2
+loop_mode = 1
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprites:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.05, 0.1, 0.15, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [0.0, -0.139626, 0.0, 0.139626, 0.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_jymyi"]
+_data = {
+"die": SubResource("Animation_o30a4"),
+"idle": SubResource("Animation_6ppvu"),
+"move": SubResource("Animation_nvc2i")
+}
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_eb3vo"]
+resource_local_to_scene = true
+shader = ExtResource("4_i7a2o")
+shader_parameter/hit_opacity = 0.0
+
+[node name="Pumpkin" type="CharacterBody2D" groups=["enemy"]]
+script = ExtResource("1_nyhtd")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_jymyi")
+}
+
+[node name="DamageTaker" parent="." node_paths=PackedStringArray("flash_anim", "root") groups=["enemy"] instance=ExtResource("1_e7cjy")]
+max_health = 4
+flash_anim = NodePath("../FlashAnimation")
+root = NodePath("..")
+
+[node name="FlashAnimation" parent="." node_paths=PackedStringArray("to_effect") instance=ExtResource("2_8p32u")]
+to_effect = [NodePath("../Sprites/Pumpkin")]
+
+[node name="Sprites" type="Node2D" parent="."]
+
+[node name="Pumpkin" type="Sprite2D" parent="Sprites"]
+material = SubResource("ShaderMaterial_eb3vo")
+position = Vector2(0, -9)
+texture = ExtResource("3_thex2")
+
+[node name="Shadow" type="Sprite2D" parent="Sprites"]
+scale = Vector2(1.2, 0.5)
+texture = ExtResource("4_bjsqv")
+
+[node name="Footstepper" parent="." instance=ExtResource("7_4tkd2")]
+
+[connection signal="died" from="DamageTaker" to="." method="_on_damage_taker_died"]

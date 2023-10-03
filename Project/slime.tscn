@@ -1,0 +1,137 @@
+[gd_scene load_steps=15 format=3 uid="uid://dyi28htwu80q5"]
+
+[ext_resource type="Texture2D" uid="uid://bsgyt1mg2s357" path="res://Graphics/Shadow.png" id="1_2do5m"]
+[ext_resource type="Script" path="res://slime.gd" id="1_h3o2p"]
+[ext_resource type="Texture2D" uid="uid://c458bnkwu8bew" path="res://Graphics/Slime.png" id="2_47qfq"]
+[ext_resource type="Shader" path="res://Shaders/flash_white.gdshader" id="3_cwsrg"]
+[ext_resource type="Script" path="res://damage_taker.gd" id="5_qhbr3"]
+[ext_resource type="AudioStream" uid="uid://b66swdqgn7bet" path="res://Audio/slime_hurt.ogg" id="6_kjp12"]
+[ext_resource type="PackedScene" uid="uid://ce58u41wb8o20" path="res://Shaders/flash_animation.tscn" id="6_n76hm"]
+[ext_resource type="PackedScene" uid="uid://c133p1vc628ba" path="res://attack.tscn" id="7_ooskx"]
+
+[sub_resource type="Animation" id="Animation_trg5j"]
+resource_name = "die"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprites:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1.26, 1), Vector2(1e-05, 1e-05)]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("DamageTaker")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.2),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"destroy_root"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_gkclr"]
+resource_name = "idle"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprites:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1.26, 1), Vector2(1.292, 1.025), Vector2(1.26, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_745wv"]
+resource_name = "move"
+length = 0.6
+loop_mode = 1
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprites:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1.26, 1), Vector2(1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_mrrav"]
+_data = {
+"die": SubResource("Animation_trg5j"),
+"idle": SubResource("Animation_gkclr"),
+"move": SubResource("Animation_745wv")
+}
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ss1xx"]
+resource_local_to_scene = true
+shader = ExtResource("3_cwsrg")
+shader_parameter/hit_opacity = 0.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_qyvs4"]
+size = Vector2(20, 14)
+
+[node name="Slime" type="CharacterBody2D" groups=["enemy"]]
+script = ExtResource("1_h3o2p")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_mrrav")
+}
+
+[node name="Sprites" type="Node2D" parent="."]
+scale = Vector2(1e-05, 1e-05)
+
+[node name="Shadow" type="Sprite2D" parent="Sprites"]
+position = Vector2(0, -0.461538)
+scale = Vector2(2, 0.615385)
+texture = ExtResource("1_2do5m")
+
+[node name="Sprite2D" type="Sprite2D" parent="Sprites"]
+material = SubResource("ShaderMaterial_ss1xx")
+position = Vector2(0, -9)
+scale = Vector2(0.793651, 1)
+texture = ExtResource("2_47qfq")
+hframes = 2
+
+[node name="DamageTaker" type="Area2D" parent="." node_paths=PackedStringArray("flash_anim", "root") groups=["enemy"]]
+position = Vector2(0, -9)
+script = ExtResource("5_qhbr3")
+max_health = 4
+flash_anim = NodePath("../FlashAnimation")
+root = NodePath("..")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DamageTaker"]
+shape = SubResource("RectangleShape2D_qyvs4")
+
+[node name="HurtSound" type="AudioStreamPlayer2D" parent="DamageTaker"]
+stream = ExtResource("6_kjp12")
+
+[node name="FlashAnimation" parent="." node_paths=PackedStringArray("to_effect") instance=ExtResource("6_n76hm")]
+to_effect = [NodePath("../Sprites/Sprite2D")]
+
+[node name="Attack" parent="." node_paths=PackedStringArray("friendly_damage_taker") instance=ExtResource("7_ooskx")]
+position = Vector2(0, -8.25)
+damage_delay = 0.25
+friendly_damage_taker = NodePath("../DamageTaker")
+exclude_group = "enemy"
+
+[connection signal="died" from="DamageTaker" to="." method="_on_damage_taker_died"]
+[connection signal="area_shape_entered" from="Attack" to="Attack" method="_on_area_shape_entered"]
+[connection signal="area_shape_exited" from="Attack" to="Attack" method="_on_area_shape_exited"]

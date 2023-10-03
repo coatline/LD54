@@ -1,0 +1,159 @@
+[gd_scene load_steps=17 format=3 uid="uid://bkaybwxoxq2q5"]
+
+[ext_resource type="Texture2D" uid="uid://bsgyt1mg2s357" path="res://Graphics/Shadow.png" id="1_ca6bs"]
+[ext_resource type="Script" path="res://skeleton.gd" id="1_ts8mm"]
+[ext_resource type="Shader" path="res://Shaders/flash_white.gdshader" id="3_8rd3v"]
+[ext_resource type="Texture2D" uid="uid://c301texsh26h8" path="res://Graphics/SkeletonBody.png" id="3_qk4r7"]
+[ext_resource type="Script" path="res://damage_taker.gd" id="5_mwwca"]
+[ext_resource type="PackedScene" uid="uid://ce58u41wb8o20" path="res://Shaders/flash_animation.tscn" id="6_hjayu"]
+[ext_resource type="AudioStream" uid="uid://b66swdqgn7bet" path="res://Audio/slime_hurt.ogg" id="6_n2r88"]
+[ext_resource type="Script" path="res://attack.gd" id="7_uawym"]
+[ext_resource type="PackedScene" uid="uid://crbhj1tfua661" path="res://Scenes/footstepper.tscn" id="9_6g7io"]
+
+[sub_resource type="Animation" id="Animation_74rye"]
+resource_name = "die"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprites:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1e-05, 1e-05)]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("DamageTaker")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.3),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"destroy_root"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_d4jdq"]
+resource_name = "idle"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprites/Skeleton:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1.04, 1.04), Vector2(1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprites/Skeleton:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(1),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="Animation" id="Animation_edaox"]
+resource_name = "move"
+length = 0.4
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprites:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [0.0, -0.174533, 0.0, 0.174533, 0.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_xlwhy"]
+_data = {
+"die": SubResource("Animation_74rye"),
+"idle": SubResource("Animation_d4jdq"),
+"move": SubResource("Animation_edaox")
+}
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7a57s"]
+resource_local_to_scene = true
+shader = ExtResource("3_8rd3v")
+shader_parameter/hit_opacity = 0.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_iw6dd"]
+size = Vector2(8, 26)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3jpk6"]
+size = Vector2(2.05339, 5.74949)
+
+[node name="Skeleton" type="CharacterBody2D" groups=["enemy"]]
+script = ExtResource("1_ts8mm")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+autoplay = "idle"
+libraries = {
+"": SubResource("AnimationLibrary_xlwhy")
+}
+
+[node name="Sprites" type="Node2D" parent="."]
+
+[node name="Shadow" type="Sprite2D" parent="Sprites"]
+scale = Vector2(1.44, 1)
+texture = ExtResource("1_ca6bs")
+
+[node name="Skeleton" type="Sprite2D" parent="Sprites"]
+material = SubResource("ShaderMaterial_7a57s")
+position = Vector2(0, -15)
+texture = ExtResource("3_qk4r7")
+
+[node name="DamageTaker" type="Area2D" parent="." node_paths=PackedStringArray("flash_anim", "root") groups=["enemy"]]
+position = Vector2(0, -9)
+script = ExtResource("5_mwwca")
+max_health = 6
+flash_anim = NodePath("../FlashAnimation")
+root = NodePath("..")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DamageTaker"]
+position = Vector2(0, -6)
+shape = SubResource("RectangleShape2D_iw6dd")
+
+[node name="HurtSound" type="AudioStreamPlayer2D" parent="DamageTaker"]
+stream = ExtResource("6_n2r88")
+
+[node name="FlashAnimation" parent="." node_paths=PackedStringArray("to_effect") instance=ExtResource("6_hjayu")]
+to_effect = [NodePath("../Sprites/Skeleton")]
+speed = 7
+
+[node name="Attack" type="Area2D" parent="." node_paths=PackedStringArray("friendly_damage_taker")]
+script = ExtResource("7_uawym")
+damage_delay = 0.3
+damage = 2
+friendly_damage_taker = NodePath("../DamageTaker")
+exclude_group = "enemy"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Attack"]
+position = Vector2(0, -15)
+scale = Vector2(4.87, 4.87)
+shape = SubResource("RectangleShape2D_3jpk6")
+
+[node name="Footstepper" parent="." instance=ExtResource("9_6g7io")]
+
+[connection signal="died" from="DamageTaker" to="." method="_on_damage_taker_died"]
+[connection signal="area_shape_entered" from="Attack" to="Attack" method="_on_area_shape_entered"]
+[connection signal="area_shape_exited" from="Attack" to="Attack" method="_on_area_shape_exited"]

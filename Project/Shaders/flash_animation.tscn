@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://ce58u41wb8o20"]
+
+[ext_resource type="Script" path="res://flash_animation.gd" id="1_pmhox"]
+
+[node name="FlashAnimation" type="Node2D"]
+script = ExtResource("1_pmhox")

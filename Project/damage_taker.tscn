@@ -1,0 +1,16 @@
+[gd_scene load_steps=4 format=3 uid="uid://uoplpq7ugdm5"]
+
+[ext_resource type="Script" path="res://damage_taker.gd" id="1_7cchn"]
+[ext_resource type="AudioStream" uid="uid://b66swdqgn7bet" path="res://Audio/slime_hurt.ogg" id="2_ioaa3"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_qyvs4"]
+size = Vector2(20, 14)
+
+[node name="DamageTaker" type="Area2D"]
+script = ExtResource("1_7cchn")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_qyvs4")
+
+[node name="HurtSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("2_ioaa3")

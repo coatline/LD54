@@ -1,0 +1,146 @@
+[gd_scene load_steps=21 format=3 uid="uid://c73x3c4te5jbe"]
+
+[ext_resource type="Texture2D" uid="uid://dxgpptaulrqdf" path="res://Graphics/BirdEat.png" id="1_oned3"]
+[ext_resource type="Texture2D" uid="uid://fs8ox3wj3ip1" path="res://Graphics/BirdFly.png" id="2_jhry3"]
+[ext_resource type="Script" path="res://Scripts/bird.gd" id="3_ce56j"]
+[ext_resource type="Texture2D" uid="uid://bsgyt1mg2s357" path="res://Graphics/Shadow.png" id="4_bqdaa"]
+[ext_resource type="Script" path="res://periodic_sound.gd" id="5_7duty"]
+[ext_resource type="AudioStream" uid="uid://cy6tiuj400fy8" path="res://Audio/bird_tweet.ogg" id="5_ukg7t"]
+[ext_resource type="AudioStream" uid="uid://fxnlcc0ontxe" path="res://Audio/bird_flapping.ogg" id="7_tshtq"]
+[ext_resource type="AudioStream" uid="uid://dqtihydstwff" path="res://Audio/bird_flap_once_ogg.ogg" id="8_ilu5o"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mqsb7"]
+atlas = ExtResource("1_oned3")
+region = Rect2(0, 0, 7, 7)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ot4ev"]
+atlas = ExtResource("1_oned3")
+region = Rect2(7, 0, 7, 7)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ni28n"]
+atlas = ExtResource("1_oned3")
+region = Rect2(14, 0, 7, 7)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l4qo2"]
+atlas = ExtResource("1_oned3")
+region = Rect2(21, 0, 7, 7)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rp48y"]
+atlas = ExtResource("1_oned3")
+region = Rect2(28, 0, 7, 7)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xi71d"]
+atlas = ExtResource("1_oned3")
+region = Rect2(35, 0, 7, 7)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_o21ye"]
+atlas = ExtResource("2_jhry3")
+region = Rect2(0, 0, 7, 6)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5ekel"]
+atlas = ExtResource("2_jhry3")
+region = Rect2(7, 0, 7, 6)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_37xsx"]
+atlas = ExtResource("2_jhry3")
+region = Rect2(14, 0, 7, 6)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_23qun"]
+atlas = ExtResource("2_jhry3")
+region = Rect2(21, 0, 7, 6)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_rr0k3"]
+animations = [{
+"frames": [{
+"duration": 5.0,
+"texture": SubResource("AtlasTexture_mqsb7")
+}, {
+"duration": 0.5,
+"texture": SubResource("AtlasTexture_ot4ev")
+}, {
+"duration": 0.5,
+"texture": SubResource("AtlasTexture_ni28n")
+}, {
+"duration": 2.0,
+"texture": SubResource("AtlasTexture_l4qo2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rp48y")
+}, {
+"duration": 3.0,
+"texture": SubResource("AtlasTexture_l4qo2")
+}, {
+"duration": 0.75,
+"texture": SubResource("AtlasTexture_rp48y")
+}, {
+"duration": 0.75,
+"texture": SubResource("AtlasTexture_xi71d")
+}],
+"loop": true,
+"name": &"Eat",
+"speed": 4.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_o21ye")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5ekel")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_37xsx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_23qun")
+}],
+"loop": true,
+"name": &"Fly",
+"speed": 5.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_y4cxe"]
+radius = 75.06
+
+[node name="Bird" type="AnimatedSprite2D"]
+z_index = 3
+sprite_frames = SubResource("SpriteFrames_rr0k3")
+animation = &"Fly"
+script = ExtResource("3_ce56j")
+
+[node name="DetectionArea" type="Area2D" parent="."]
+visible = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea"]
+shape = SubResource("CircleShape2D_y4cxe")
+
+[node name="Shadow" type="Sprite2D" parent="."]
+position = Vector2(0, 3)
+scale = Vector2(0.831139, 0.535664)
+texture = ExtResource("4_bqdaa")
+
+[node name="PeriodicTweetSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("5_ukg7t")
+volume_db = 5.0
+pitch_scale = 2.0
+max_distance = 275.0
+attenuation = 1.7411
+panning_strength = 3.0
+script = ExtResource("5_7duty")
+
+[node name="FlappingSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("7_tshtq")
+volume_db = 4.0
+pitch_scale = 1.38
+max_distance = 135.0
+attenuation = 2.07053
+panning_strength = 3.0
+
+[node name="FlyingFlapSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("8_ilu5o")
+volume_db = -2.0
+max_distance = 200.0
+script = ExtResource("5_7duty")
+min_delay = 0.45
+max_delay = 0.55
+
+[connection signal="body_entered" from="DetectionArea" to="." method="_on_detection_area_body_entered"]

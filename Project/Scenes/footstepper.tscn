@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://crbhj1tfua661"]
+
+[ext_resource type="Script" path="res://footstepper.gd" id="1_yfs74"]
+
+[node name="Footstepper" type="AudioStreamPlayer2D"]
+volume_db = -15.0
+max_distance = 165.0
+script = ExtResource("1_yfs74")

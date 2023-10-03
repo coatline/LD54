@@ -1,0 +1,65 @@
+[gd_scene load_steps=9 format=3 uid="uid://b5iohvm1llr82"]
+
+[ext_resource type="Texture2D" uid="uid://tpn4sxrde7dm" path="res://Graphics/Fire.png" id="1_2bgbt"]
+[ext_resource type="AudioStream" uid="uid://ep8a3nclkdwx" path="res://Audio/fire.ogg" id="2_8w7xk"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_8kmjt"]
+size = Vector2(32, 3)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6dcop"]
+atlas = ExtResource("1_2bgbt")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_e34m4"]
+atlas = ExtResource("1_2bgbt")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0j516"]
+atlas = ExtResource("1_2bgbt")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tidvv"]
+atlas = ExtResource("1_2bgbt")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_gshhj"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6dcop")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_e34m4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0j516")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tidvv")
+}],
+"loop": true,
+"name": &"default",
+"speed": 7.0
+}]
+
+[node name="Fire" type="StaticBody2D"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -2)
+shape = SubResource("RectangleShape2D_8kmjt")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+z_index = 1
+z_as_relative = false
+y_sort_enabled = true
+position = Vector2(0, -16)
+sprite_frames = SubResource("SpriteFrames_gshhj")
+autoplay = "default"
+frame_progress = 0.151326
+
+[node name="FireSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("2_8w7xk")
+pitch_scale = 0.32
+autoplay = true
+max_distance = 100.0
+attenuation = 0.353554

@@ -1,0 +1,363 @@
+[gd_scene load_steps=23 format=3 uid="uid://bu0ajtfb2vl27"]
+
+[ext_resource type="Script" path="res://Player/player.gd" id="1_14dhx"]
+[ext_resource type="Texture2D" uid="uid://mj10fiwpmrg3" path="res://Graphics/Player.png" id="2_m46rl"]
+[ext_resource type="Texture2D" uid="uid://bsgyt1mg2s357" path="res://Graphics/Shadow.png" id="3_ybcoc"]
+[ext_resource type="Texture2D" uid="uid://n85mda4wq536" path="res://Graphics/Hat.png" id="5_i40ri"]
+[ext_resource type="Shader" path="res://Shaders/flash_white.gdshader" id="5_wyo7j"]
+[ext_resource type="Texture2D" uid="uid://bavntk4flily3" path="res://Graphics/Rain Coat.png" id="6_gjoaw"]
+[ext_resource type="Texture2D" uid="uid://cogthffk62yoy" path="res://Graphics/Snow Boots.png" id="7_wdx8g"]
+[ext_resource type="Texture2D" uid="uid://qku2v2jeyy0i" path="res://Graphics/FlareGun.png" id="9_00rb6"]
+[ext_resource type="PackedScene" uid="uid://ce58u41wb8o20" path="res://Shaders/flash_animation.tscn" id="9_aeb71"]
+[ext_resource type="Script" path="res://damage_taker.gd" id="10_ihwby"]
+[ext_resource type="AudioStream" uid="uid://cxrfntqfvgbp5" path="res://Audio/get_item.ogg" id="11_fflro"]
+[ext_resource type="AudioStream" uid="uid://b66swdqgn7bet" path="res://Audio/slime_hurt.ogg" id="11_w2urt"]
+[ext_resource type="AudioStream" uid="uid://cmsn4daersh0v" path="res://Audio/equip_item.ogg" id="12_c73dv"]
+[ext_resource type="PackedScene" uid="uid://crbhj1tfua661" path="res://Scenes/footstepper.tscn" id="14_av4sf"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_x2kud"]
+size = Vector2(4, 2)
+
+[sub_resource type="Animation" id="Animation_cbeyy"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Camera2D:zoom")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(2, 2)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprites/Player:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprites/Player:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, -16.5)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("DamageTaker/CollisionShape2D:disabled")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_ptbjy"]
+resource_name = "die"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Camera2D:zoom")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(2, 2), Vector2(4, 4)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprites/Player:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.2, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 1.48353]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprites/Player:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.2, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0, -16.5), Vector2(0, -2.72)]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath(".")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(1),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"respawn"
+}]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("DamageTaker/CollisionShape2D:disabled")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="Animation" id="Animation_5qosv"]
+resource_name = "idle"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprites:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1.05, 1.05), Vector2(1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprites:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprites/Player:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, -16.5)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Sprites/Player:rotation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("DamageTaker/CollisionShape2D:disabled")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_48bqd"]
+resource_name = "move"
+length = 0.4
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprites:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [0.0, 0.0436332, 0.0, -0.0436332, 0.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprites/Player:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprites/Player:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, -16.5)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("DamageTaker/CollisionShape2D:disabled")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_vvv61"]
+_data = {
+"RESET": SubResource("Animation_cbeyy"),
+"die": SubResource("Animation_ptbjy"),
+"idle": SubResource("Animation_5qosv"),
+"move": SubResource("Animation_48bqd")
+}
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8r36l"]
+shader = ExtResource("5_wyo7j")
+shader_parameter/hit_opacity = 0.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_qn5x8"]
+size = Vector2(10, 32)
+
+[node name="Player" type="CharacterBody2D"]
+script = ExtResource("1_14dhx")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(2, 2)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -1)
+shape = SubResource("RectangleShape2D_x2kud")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+autoplay = "idle"
+libraries = {
+"": SubResource("AnimationLibrary_vvv61")
+}
+
+[node name="Sprites" type="Node2D" parent="."]
+
+[node name="Shadow" type="Sprite2D" parent="Sprites"]
+scale = Vector2(1.8, 0.986467)
+texture = ExtResource("3_ybcoc")
+
+[node name="Player" type="Sprite2D" parent="Sprites"]
+z_index = 2
+y_sort_enabled = true
+material = SubResource("ShaderMaterial_8r36l")
+position = Vector2(0, -16.5)
+texture = ExtResource("2_m46rl")
+
+[node name="Clothing" type="Node2D" parent="Sprites"]
+
+[node name="Sun Hat" type="Sprite2D" parent="Sprites/Clothing"]
+visible = false
+z_index = 2
+position = Vector2(-0.5, -32.5)
+texture = ExtResource("5_i40ri")
+
+[node name="Rain Coat" type="Sprite2D" parent="Sprites/Clothing"]
+visible = false
+z_index = 2
+position = Vector2(0, -17.5)
+texture = ExtResource("6_gjoaw")
+
+[node name="Snow Boots" type="Sprite2D" parent="Sprites/Clothing"]
+visible = false
+z_index = 2
+position = Vector2(-2.38419e-07, -1.90476)
+texture = ExtResource("7_wdx8g")
+
+[node name="Flare Gun" type="Sprite2D" parent="Sprites/Clothing"]
+visible = false
+z_index = 2
+position = Vector2(5, -12)
+rotation = 1.54927
+texture = ExtResource("9_00rb6")
+
+[node name="Display" type="Sprite2D" parent="Sprites"]
+z_index = 2
+position = Vector2(0, -40)
+
+[node name="AttackOrigin" type="Node2D" parent="."]
+position = Vector2(0, -20)
+
+[node name="FlashAnimation" parent="." node_paths=PackedStringArray("to_effect") instance=ExtResource("9_aeb71")]
+to_effect = [NodePath("../Sprites/Player")]
+
+[node name="DamageTaker" type="Area2D" parent="." node_paths=PackedStringArray("flash_anim", "root")]
+script = ExtResource("10_ihwby")
+max_health = 10
+flash_anim = NodePath("../FlashAnimation")
+root = NodePath("..")
+dont_destroy_root = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DamageTaker"]
+position = Vector2(0, -16)
+shape = SubResource("RectangleShape2D_qn5x8")
+
+[node name="HurtSound" type="AudioStreamPlayer2D" parent="DamageTaker"]
+stream = ExtResource("11_w2urt")
+volume_db = 3.0
+pitch_scale = 0.7
+
+[node name="AudioListener2D" type="AudioListener2D" parent="."]
+current = true
+
+[node name="GetItemSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("11_fflro")
+volume_db = 2.0
+
+[node name="EquipItemSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("12_c73dv")
+
+[node name="Footstepper" parent="." instance=ExtResource("14_av4sf")]
+
+[connection signal="died" from="DamageTaker" to="." method="_on_damage_taker_died"]

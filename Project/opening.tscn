@@ -1,0 +1,126 @@
+[gd_scene load_steps=9 format=3 uid="uid://gs6l7hbtw70e"]
+
+[ext_resource type="Script" path="res://opening_cutscene.gd" id="1_c5ivd"]
+[ext_resource type="Texture2D" uid="uid://x0s1xsejc2mv" path="res://Graphics/OpeningCutscene/Scene1.png" id="2_28id6"]
+[ext_resource type="Texture2D" uid="uid://7mmbrexd8os2" path="res://Graphics/OpeningCutscene/Arrow.png" id="2_hjuow"]
+[ext_resource type="AudioStream" uid="uid://cfrvkymmkh20o" path="res://Audio/snow_ambience.ogg" id="4_hhya5"]
+[ext_resource type="AudioStream" uid="uid://bpjcv34nq14sy" path="res://Audio/airplane_wrecking.ogg" id="5_88daa"]
+[ext_resource type="AudioStream" uid="uid://txgej4bqmjnt" path="res://Audio/lightning1.ogg" id="5_o72t7"]
+[ext_resource type="AudioStream" uid="uid://dek0ogwq0qgfq" path="res://Audio/lightning2.ogg" id="6_5saqy"]
+[ext_resource type="AudioStream" uid="uid://c7b3xya1wycyo" path="res://Audio/thunder.ogg" id="7_difw7"]
+
+[node name="Opening" type="CanvasLayer"]
+script = ExtResource("1_c5ivd")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="ColorRect2" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 68.0
+offset_top = 21.0
+offset_right = -46.0
+offset_bottom = -18.0
+grow_horizontal = 2
+grow_vertical = 2
+rotation = 0.0200507
+color = Color(0.054902, 0.054902, 0.054902, 1)
+
+[node name="Background" type="TextureRect" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -485.0
+offset_top = -282.0
+offset_right = 504.0
+offset_bottom = 275.0
+grow_horizontal = 2
+grow_vertical = 2
+rotation = 0.0179472
+texture = ExtResource("2_28id6")
+
+[node name="Fade" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="ForwardButton" type="TextureButton" parent="."]
+visible = false
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -24.0
+offset_top = -20.0
+grow_horizontal = 0
+grow_vertical = 0
+texture_normal = ExtResource("2_hjuow")
+texture_pressed = ExtResource("2_hjuow")
+texture_hover = ExtResource("2_hjuow")
+texture_disabled = ExtResource("2_hjuow")
+texture_focused = ExtResource("2_hjuow")
+
+[node name="BackwardButton" type="TextureButton" parent="."]
+visible = false
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -20.0
+offset_right = 24.0
+grow_vertical = 0
+texture_normal = ExtResource("2_hjuow")
+texture_pressed = ExtResource("2_hjuow")
+texture_hover = ExtResource("2_hjuow")
+texture_disabled = ExtResource("2_hjuow")
+texture_focused = ExtResource("2_hjuow")
+flip_h = true
+
+[node name="Narration" type="Label" parent="."]
+visible = false
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -190.0
+offset_top = -44.0
+offset_right = 189.0
+offset_bottom = 3.0
+grow_horizontal = 2
+grow_vertical = 0
+rotation = 0.00835896
+theme_override_font_sizes/font_size = 31
+text = "One innocent afternoon.."
+
+[node name="Ambience" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("4_hhya5")
+pitch_scale = 1.88
+autoplay = true
+
+[node name="Lightning" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("5_o72t7")
+
+[node name="Lightning2" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("6_5saqy")
+
+[node name="Thunder" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("7_difw7")
+
+[node name="Wrecking sound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("5_88daa")
+
+[connection signal="pressed" from="ForwardButton" to="." method="_on_forward_button_pressed"]
+[connection signal="pressed" from="BackwardButton" to="." method="_on_backward_button_pressed"]
